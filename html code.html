@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shivprasad Furniture Works: Bed Design Generator</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8f8f8;
+            color: #333;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start; /* Align to top to prevent jumping */
+            min-height: 100vh;
+            padding: 40px 20px;
+        }
+        .container {
+            max-width: 900px;
+            width: 100%;
+            background-color: #fff;
+            border-radius: 16px;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+            padding: 40px;
+            text-align: center;
+        }
+        .section-heading {
+            font-size: 2.2rem;
+            font-weight: 700;
+            color: #4a4a4a;
+            margin-bottom: 30px;
+            position: relative;
+            padding-bottom: 10px;
+        }
+        .section-heading::after {
+            content: '';
+            position: absolute;
+            left: 50%;
+            bottom: 0;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 3px;
+            background-color: #a0522d;
+            border-radius: 2px;
+        }
+        .input-group {
+            margin-bottom: 25px;
+            text-align: left;
+        }
+        label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #555;
+        }
+        select, textarea {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 1rem;
+            color: #333;
+            background-color: #fefefe;
+            transition: border-color 0.2s ease, box-shadow 0.2s ease;
+        }
+        select:focus, textarea:focus {
+            border-color: #a0522d;
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(160, 82, 45, 0.2);
+        }
+        textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+        button {
+            background-color: #a0522d;
+            color: #fff;
+            padding: 14px 28px;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            box-shadow: 0 5px 15px rgba(160, 82, 45, 0.3);
+        }
+        button:hover {
+            background-color: #d35400;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(160, 82, 45, 0.4);
+        }
+        button:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+            box-shadow: none;
+        }
+        .image-display-area {
+            margin-top: 40px;
+            background-color: #f0f0f0;
+            border-radius: 12px;
+            padding: 20px;
+            min-height: 300px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+            box-shadow: inset 0 0 10px rgba(0,0,0,0.05);
+        }
+        .generated-image {
+            max-width: 100%;
+            max-height: 450px; /* Limit image height */
+            height: auto;
+            border-radius: 8px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            opacity: 0.5; /* Dim initially */
+            transition: opacity 0.3s ease;
+        }
+        .loading-spinner {
+            border: 5px solid rgba(0, 0, 0, 0.1);
+            border-top: 5px solid #a0522d;
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            animation: spin 1s linear infinite;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            display: none; /* Hidden by default */
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        .message-box {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 8px;
+            background-color: #ffeccc;
+            color: #a0522d;
+            border: 1px solid #a0522d;
+            font-size: 0.95rem;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="section-heading">Shivprasad Furniture Works: Bed Design Generator</h1>
+        <p class="mb-8 text-gray-600">Explore custom bed designs made with plywood, solid wood, and various laminate/veneer finishes. Select a concept or describe your ideal bed!</p>
+
+        <div class="input-group">
+            <label for="designConcept">Choose a Design Concept:</label>
+            <select id="designConcept" class="mb-4">
+                <option value="">-- Select a concept --</option>
+                <option value="A modern bed design with a sleek plywood frame, finished with a natural wood veneer. The headboard is integrated, featuring subtle LED backlighting. The bed is styled in a minimalist bedroom with warm, inviting light.">Zenith Floating Platform Bed (Natural Veneer, LED)</option>
+                <option value="A contemporary bed with a seamless high-gloss white laminate finish and integrated hydraulic storage. The headboard is a simple, clean panel. Styled in a bright, modern bedroom.">Dharma Hydraulic Storage Bed (High-Gloss White)</option>
+                <option value="A luxurious bed with a grand, tall headboard upholstered in deep charcoal velvet, framed by slim plywood panels finished in a rich American Walnut veneer. Styled in an elegant bedroom.">Serenity Upholstered Panel Bed (Walnut & Velvet)</option>
+                <option value="A striking bed headboard design composed of interlocking geometric shapes made from plywood, finished with contrasting matte black and light grey laminates. The bed frame is simple and understated.">Geometric Harmony Bed (Matte Laminate)</option>
+                <option value="A robust industrial-chic bed design with integrated open shelving and closed drawers in the headboard, finished with a concrete-effect laminate. Black metal accents.">Urban Loft Storage Bed (Concrete Laminate)</option>
+                <option value="A playful kids' bunk bed, sturdy plywood structure with colorful decorative laminates in sky blue and cloud white. Features built-in ladder and guardrails.">Kids' Dream Bunk Bed (Colorful Laminate)</option>
+                <option value="A classic panel bed with a tall, stately headboard featuring recessed panels and subtle detailing, finished in a polished Teak veneer. The footboard mirrors the headboard's design.">Heritage Haven Panel Bed (Polished Teak)</option>
+            </select>
+            <label for="customPrompt">Or describe your custom bed design:</label>
+            <textarea id="customPrompt" placeholder="e.g., A king-size bed with a curved plywood headboard, finished in a dark grey textured laminate, with integrated side tables made of solid wood."></textarea>
+        </div>
+
+        <button id="generateBtn">Generate Bed Image</button>
+
+        <div id="messageBox" class="message-box"></div>
+
+        <div class="image-display-area">
+            <img id="generatedImage" src="" alt="Generated Bed Design" class="generated-image">
+            <div class="loading-spinner" id="imageSpinner"></div>
+        </div>
+    </div>
+
+    <script>
+        const designConceptSelect = document.getElementById('designConcept');
+        const customPromptTextarea = document.getElementById('customPrompt');
+        const generateButton = document.getElementById('generateBtn');
+        const generatedImage = document.getElementById('generatedImage');
+        const imageSpinner = document.getElementById('imageSpinner');
+        const messageBox = document.getElementById('messageBox');
+
+        // Function to display messages to the user
+        function showMessage(message, type = 'info') {
+            messageBox.textContent = message;
+            messageBox.style.display = 'block';
+            if (type === 'error') {
+                messageBox.style.backgroundColor = '#ffe0e0';
+                messageBox.style.borderColor = '#d32f2f';
+                messageBox.style.color = '#d32f2f';
+            } else {
+                messageBox.style.backgroundColor = '#ffeccc';
+                messageBox.style.borderColor = '#a0522d';
+                messageBox.style.color = '#a0522d';
+            }
+        }
+
+        // Function to hide messages
+        function hideMessage() {
+            messageBox.style.display = 'none';
+        }
+
+        // Main image generation function
+        async function generateImage(prompt) {
+            hideMessage();
+            generateButton.disabled = true;
+            generatedImage.style.opacity = '0.5'; // Dim image
+            imageSpinner.style.display = 'block'; // Show spinner
+            generatedImage.src = ''; // Clear previous image
+
+            try {
+                const payload = { instances: { prompt: prompt }, parameters: { "sampleCount": 1 } };
+                const apiKey = ""; // Leave as empty string. Canvas will automatically provide it.
+                const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/imagen-3.0-generate-002:predict?key=${apiKey}`;
+
+                const response = await fetch(apiUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+
+                const result = await response.json();
+
+                if (result.predictions && result.predictions.length > 0 && result.predictions[0].bytesBase64Encoded) {
+                    const imageUrl = `data:image/png;base64,${result.predictions[0].bytesBase64Encoded}`;
+                    generatedImage.src = imageUrl;
+                    generatedImage.style.opacity = '1'; // Restore opacity
+                    showMessage("Image generated successfully! Feel free to try another design.", "success");
+                } else {
+                    console.error('Image generation failed or returned unexpected structure:', result);
+                    generatedImage.src = `https://placehold.co/600x450/cccccc/333333?text=Image+Error`; // Fallback
+                    generatedImage.style.opacity = '1';
+                    showMessage("Failed to generate image. Please try a different prompt or concept.", "error");
+                }
+            } catch (error) {
+                console.error('Error generating image:', error);
+                generatedImage.src = `https://placehold.co/600x450/cccccc/333333?text=Image+Load+Failed`; // Fallback
+                generatedImage.style.opacity = '1';
+                showMessage("An error occurred during image generation. Please check your internet connection or try again later.", "error");
+            } finally {
+                imageSpinner.style.display = 'none'; // Hide spinner
+                generateButton.disabled = false;
+            }
+        }
+
+        // Event listener for the Generate button
+        generateButton.addEventListener('click', () => {
+            let prompt = customPromptTextarea.value.trim();
+            const selectedConcept = designConceptSelect.value;
+
+            if (selectedConcept && !prompt) {
+                prompt = selectedConcept;
+            } else if (prompt && selectedConcept) {
+                // If both are entered, prioritize custom prompt but inform user
+                showMessage("Using your custom description. The selected concept will be ignored.", "info");
+            } else if (!prompt && !selectedConcept) {
+                showMessage("Please select a design concept or enter a custom description.", "error");
+                return;
+            }
+
+            // Enhance the prompt with material context
+            const basePrompt = "A photorealistic image of a modern bed design for Shivprasad Furniture Works, made with high-grade plywood and solid wood accents, featuring ";
+            const materialContext = "with various laminate and veneer finishes. Interior design photography style, well-lit bedroom setting.";
+            const finalPrompt = basePrompt + prompt + ", " + materialContext;
+
+            generateImage(finalPrompt);
+        });
+
+        // Initial image generation on load for a default concept
+        window.onload = () => {
+            designConceptSelect.value = "A modern bed design with a sleek plywood frame, finished with a natural wood veneer. The headboard is integrated, featuring subtle LED backlighting. The bed is styled in a minimalist bedroom with warm, inviting light.";
+            generateImage(designConceptSelect.value); // Generate default image
+        };
+    </script>
+</body>
+</html>
